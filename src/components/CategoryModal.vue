@@ -59,7 +59,7 @@ export default {
     async fetchCategories() {
       try {
         const response = await axios.get(`/categories`);
-        const rawCategories = response.data.characters;
+        const rawCategories = response.data.categories;
         const treeData = rawCategories.map(cat => ({
           id: cat.id,
           parent: cat.parent_id === null ? '#' : cat.parent_id,
