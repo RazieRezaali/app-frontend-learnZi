@@ -21,12 +21,7 @@
         <ul class="navbar-nav ms-auto align-items-center">
           <li class="nav-item">
             <router-link to="/" class="nav-link">
-              <i class="bi bi-house-door me-1"></i>
-            </router-link>
-          </li>
-          <li class="nav-item">
-            <router-link to="/draw" class="nav-link">
-              Draw
+              Home
             </router-link>
           </li>
           <li class="nav-item">
@@ -41,6 +36,11 @@
           </li>
 
           <template v-if="auth.isAuthenticated">
+            <li class="nav-item">
+              <router-link to="/learning" class="nav-link">
+                Learning
+              </router-link>
+            </li>
             <li class="nav-item">
               <router-link to="/test" class="nav-link">
                 Quiz

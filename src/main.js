@@ -9,7 +9,7 @@ import SimilarCharacter from './components/SimilarCharacter.vue';
 import StrokeOrder from './components/StrokeOrder.vue';
 import InfoOfCharacter from './components/InfoOfCharacter.vue';
 import CharacterAudio from './components/CharacterAudio.vue';
-import HomePage from './components/HomePage.vue';
+import LearningCards from './components/LearningCards.vue';
 import CharacterDetails from './components/CharacterDetails.vue';
 import CardDetails from './components/CardDetails.vue';
 import UserRegister from './components/UserRegister.vue';
@@ -33,12 +33,12 @@ const router = createRouter({
         {
             path: '/',
             name: 'Home',
-            component: HomePage
+            component: drawCharacter
         },
         {
-            path: '/draw',
-            name: 'draw',
-            component: drawCharacter
+            path: '/learning',
+            name: 'learning',
+            component: LearningCards
         },
         {
             path: '/characters',
@@ -96,7 +96,7 @@ app.component('similar-character', SimilarCharacter);
 app.component('stroke-order', StrokeOrder);
 app.component('info-character', InfoOfCharacter);
 app.component('character-audio', CharacterAudio);
-app.component('home-page', HomePage);
+app.component('learning-cards', LearningCards);
 app.component('character-details', CharacterDetails);
 app.component('card-details', CardDetails);
 app.component('user-register', UserRegister);
