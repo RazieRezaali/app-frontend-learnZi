@@ -70,7 +70,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from '@/axios';
 import { auth } from '@/stores/auth'
 
 const categories = ref([])
@@ -92,8 +92,8 @@ const fetchRootCategories = async () => {
   }
 
   try {
-    const res = await axios.get(`http://localhost:8000/api/root-categories/${userId}`)
-    categories.value = res.data
+    const res = await axios.get(`/categories/root`);
+    categories.value = res.data.categories
     cards.value = []
     breadcrumbs.value = []
   } catch (error) {
@@ -102,7 +102,7 @@ const fetchRootCategories = async () => {
 }
 
 const enterCategory = async (category) => {
-  const res = await axios.get(`http://localhost:8000/api/cards-and-categories/${category.id}`)
+  const res = await axios.get(`/categories/cards/${category.id}`);
   categories.value = res.data.categoryChildren
   cards.value = res.data.cards
   breadcrumbs.value.push({ id: category.id, name: category.name })
@@ -112,7 +112,7 @@ const goToBreadcrumb = async (index) => {
   const breadcrumb = breadcrumbs.value[index]
   breadcrumbs.value = breadcrumbs.value.slice(0, index + 1)
 
-  const res = await axios.get(`http://localhost:8000/api/cards-and-categories/${breadcrumb.id}`)
+  const res = await axios.get(`/categories/cards/${breadcrumb.id}`);
   categories.value = res.data.categoryChildren
   cards.value = res.data.cards
 }

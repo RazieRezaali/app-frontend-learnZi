@@ -70,7 +70,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios from '@/axios';
 
 // Form state
 const form = ref({
@@ -119,7 +119,7 @@ const updateDialCode = () => {
 // Fetch countries from API
 onMounted(async () => {
   try {
-    const res = await axios.get('http://localhost:8000/api/countries')
+    const res = await axios.get('/countries')
     countries.value = res.data
   } catch (err) {
     console.error('Failed to fetch countries:', err)
@@ -138,7 +138,7 @@ const submitForm = async () => {
       phone: `${dialCode.value}${form.value.phone}`
     }
 
-    const res = await axios.post('http://localhost:8000/api/user/register', payload)
+    const res = await axios.post('/user/register', payload)
 
     const { token, user } = res.data
 

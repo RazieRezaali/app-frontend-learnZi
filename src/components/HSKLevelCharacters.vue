@@ -83,7 +83,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import CategoryModal from './CategoryModal.vue'
 import { debounce } from 'lodash'
 
@@ -112,7 +111,7 @@ export default {
   },
   methods: {
     handleSearchInput() {
-      if (this.searchKeyword.length >= 2) {
+      if (this.searchKeyword.length >= 1) {
         this.debouncedSearch()
       } else if (this.searchKeyword.length === 0) {
         this.clearSearch()
@@ -128,8 +127,8 @@ export default {
       this.isSearching = true;
 
       try {
-        const response = await axios.get(`http://localhost:8000/api/characters/search`, {
-          params: { keyword: this.searchKeyword }
+        const response = await this.$axios.get(`/characters/search`, {
+          params: { keyword: this.searchKeyword.trim() }
         });
         this.characters = response.data.characters;
       } catch (err) {
@@ -152,7 +151,7 @@ export default {
       this.error = ''
 
       try {
-        const response = await axios.get(`http://localhost:8000/api/characters/${level}`)
+        const response = await this.$axios.get(`/characters/level/${level}`)
         this.characters = response.data.characters
       } catch (err) {
         this.error = 'Failed to fetch characters.'

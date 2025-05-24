@@ -31,8 +31,8 @@
 
 <script>
 /* global $ */
-import axios from 'axios'
-import { auth } from '@/stores/auth'
+import axios from '@/axios';
+import { auth } from '@/stores/auth';
 
 export default {
   name: 'CategoryModal',
@@ -48,7 +48,7 @@ export default {
       selectedCategoryId: null,
       jstreeInstance: null,
       successMessage: ''
-    }
+    };
   },
   computed: {
     userId() {
@@ -58,10 +58,8 @@ export default {
   methods: {
     async fetchCategories() {
       try {
-        const response = await axios.get(`http://localhost:8000/api/user-category/${this.userId}`);
-        // console.log(this.userId);
+        const response = await axios.get(`/categories`);
         const rawCategories = response.data.characters;
-
         const treeData = rawCategories.map(cat => ({
           id: cat.id,
           parent: cat.parent_id === null ? '#' : cat.parent_id,
@@ -98,7 +96,6 @@ export default {
               cascade: ''
             }
           }).on('ready.jstree', () => {
-            // Hide the checkbox for the "Add Root" node
             $(`#category-tree li#${this.addRootNodeId} > a > .jstree-checkbox`).hide();
 
             tree.on('check_node.jstree', (e, data) => {
@@ -119,7 +116,6 @@ export default {
             });
           });
 
-          // Handle add category button
           tree.off('click', '.add-icon').on('click', '.add-icon', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -127,7 +123,6 @@ export default {
             this.startAddingCategory(parentId === 'null' ? null : parseInt(parentId, 10));
           });
         });
-
       } catch (error) {
         console.error('Failed to fetch categories:', error);
       }
@@ -155,12 +150,9 @@ export default {
       this.$nextTick(() => {
         $('#category-tree').find('.custom-input-form').remove();
 
-        let container;
-        if (parentId) {
-          container = $(`#category-tree li#${parentId}`);
-        } else {
-          container = $(`#category-tree li#${this.addRootNodeId}`);
-        }
+        let container = parentId
+          ? $(`#category-tree li#${parentId}`)
+          : $(`#category-tree li#${this.addRootNodeId}`);
 
         const inputFormHtml = `
           <form class="custom-input-form" style="margin-top: 6px;">
@@ -170,7 +162,6 @@ export default {
         `;
 
         container.append(inputFormHtml);
-
         const input = container.find('.new-category-input');
         input.focus();
 
@@ -197,14 +188,13 @@ export default {
 
     async handleNewCategory(name) {
       if (!name) return;
-      
       this.newCategoryName = name;
       await this.submitNewCategory();
     },
 
     async submitNewCategory() {
       try {
-        await axios.post('http://localhost:8000/api/category', {
+        await axios.post('/categories', {
           name: this.newCategoryName,
           parent_id: this.addingCategoryId ?? null,
           user_id: this.userId
@@ -223,7 +213,7 @@ export default {
       if (!this.selectedCategoryId) return;
 
       try {
-        await axios.post('http://localhost:8000/api/card', {
+        await axios.post('/card', {
           character_id: this.character.id,
           category_id: this.selectedCategoryId
         });
@@ -247,7 +237,7 @@ export default {
   mounted() {
     this.fetchCategories();
   }
-}
+};
 </script>
 
 <style scoped>#category-tree .jstree-anchor {

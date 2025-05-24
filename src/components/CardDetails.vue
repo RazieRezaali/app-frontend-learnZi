@@ -82,13 +82,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import axios from 'axios'
-import { Ckeditor } from '@ckeditor/ckeditor5-vue'
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import axios from '@/axios';
+import { Ckeditor } from '@ckeditor/ckeditor5-vue';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const editor = ClassicEditor
+const editor = ClassicEditor;
 const editorConfig = {
   toolbar: [
     'heading', '|',
@@ -107,72 +107,70 @@ const editorConfig = {
       types: ['png', 'jpeg', 'jpg', 'gif']
     }
   }
-}
+};
 
-const card = ref(null)
-const message = ref('')
-const showEditor = ref(false)
-const editorData = ref('')
-const loading = ref(true)
+const card = ref(null);
+const message = ref('');
+const showEditor = ref(false);
+const editorData = ref('');
+const loading = ref(true);
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
 const fetchCard = async () => {
-  loading.value = true
+  loading.value = true;
   try {
-    const res = await axios.get(`http://localhost:8000/api/card/${route.params.cardId}`)
-    card.value = res.data.card
+    const res = await axios.get(`/card/${route.params.cardId}`);
+    card.value = res.data.card;
   } catch (error) {
-    console.error('Failed to load card:', error)
+    console.error('Failed to load card:', error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 const deleteCard = async () => {
   if (confirm('Are you sure you want to delete this card?')) {
     try {
-      await axios.delete(`http://localhost:8000/api/card/${card.value.id}`)
-      message.value = 'Card deleted successfully.'
-      setTimeout(() => router.push({ name: 'Home' }), 1500)
+      await axios.delete(`/card/${card.value.id}`);
+      message.value = 'Card deleted successfully.';
+      setTimeout(() => router.push({ name: 'Home' }), 1500);
     } catch (error) {
-      console.error('Failed to delete card:', error)
+      console.error('Failed to delete card:', error);
     }
   }
-}
+};
 
 const editNote = () => {
-  editorData.value = card.value?.description || ''
-  showEditor.value = true
-}
+  editorData.value = card.value?.description || '';
+  showEditor.value = true;
+};
 
 const cancelEdit = () => {
-  showEditor.value = false
-  editorData.value = ''
-  message.value = ''
-}
+  showEditor.value = false;
+  editorData.value = '';
+  message.value = '';
+};
 
 const submitNote = async () => {
   try {
-    loading.value = true
-    const res = await axios.post(`http://localhost:8000/api/card-description/${card.value.id}`, {
+    loading.value = true;
+    const res = await axios.post(`/card-description/${card.value.id}`, {
       description: editorData.value
-    })
+    });
 
-    // Only update description
-    card.value.description = res.data.card.description
-
-    message.value = 'Note updated successfully!'
-    showEditor.value = false
+    card.value.description = res.data.card.description;
+    message.value = 'Note updated successfully!';
+    showEditor.value = false;
   } catch (error) {
-    console.error('Failed to update note:', error)
+    console.error('Failed to update note:', error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
-onMounted(fetchCard)
+onMounted(fetchCard);
 </script>
 
 <style scoped>

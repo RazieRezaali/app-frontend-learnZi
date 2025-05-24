@@ -60,7 +60,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
+import axios from '@/axios';
 
 // External component placeholders
 import StrokeOrder from '@/components/StrokeOrder.vue'
@@ -73,7 +73,7 @@ const loading = ref(true)
 const fetchCharacter = async () => {
   loading.value = true
   try {
-    const res = await axios.get(`http://localhost:8000/api/character/${route.params.characterId}`)
+    const res = await axios.get(`/characters/${route.params.characterId}`);
     character.value = res.data.character
   } catch (error) {
     console.error('Failed to load character details:', error)

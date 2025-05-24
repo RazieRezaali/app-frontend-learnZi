@@ -126,7 +126,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import axios from 'axios'
+import axios from '@/axios';
 
 const user = ref(null)
 const loading = ref(true)
@@ -134,12 +134,7 @@ const error = ref('')
 
 onMounted(async () => {
   try {
-    const token = localStorage.getItem('token');
-    const res = await axios.get(`http://localhost:8000/api/user/profile`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const res = await axios.get(`/user/profile`);
     user.value = res.data
   } catch (err) {
     error.value = err.response?.data?.message || 'Failed to load profile.'

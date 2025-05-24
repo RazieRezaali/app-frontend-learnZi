@@ -15,8 +15,6 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   name: 'CategoryCards',
   data() {
@@ -27,11 +25,16 @@ export default {
   },
   async mounted() {
     const id = this.$route.params.id;
-    const categoryRes = await axios.get(`http://localhost:8000/api/category/${id}`);
-    this.categoryName = categoryRes.data.name;
 
-    const cardsRes = await axios.get(`http://localhost:8000/api/category/${id}/cards`);
-    this.cards = cardsRes.data;
+    try {
+      const categoryRes = await this.$axios.get(`/category/${id}`);
+      this.categoryName = categoryRes.data.name;
+
+      const cardsRes = await this.$axios.get(`/category/${id}/cards`);
+      this.cards = cardsRes.data;
+    } catch (error) {
+      console.error('Error loading category or cards:', error);
+    }
   }
 };
 </script>

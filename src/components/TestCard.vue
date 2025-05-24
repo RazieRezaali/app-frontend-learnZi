@@ -49,8 +49,9 @@
 </template>
 
 <script>
-import TestocrCharacter from './TestocrCharacter.vue';
+import TestocrCharacter from './TestocrCharacter.vue'
 import { useToast } from 'vue-toastification'
+import axios from '@/axios'
 
 export default {
   components: { TestocrCharacter },
@@ -65,85 +66,90 @@ export default {
       typedPinyin: "",
       examCompleted: false,
       noCharacters: false,
-    };
+    }
   },
   computed: {
     currentCard() {
-      return this.characters[this.currentIndex] || null;
+      return this.characters[this.currentIndex] || null
     }
   },
   mounted() {
-    this.fetchCategories();
+    this.fetchCategories()
   },
   methods: {
     async fetchCategories() {
-      const res = await fetch("http://localhost:8000/api/test-categories", {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      this.categories = await res.json();
+      try {
+        const res = await axios.get('/categories')
+        this.categories = res.data.categories
+      } catch (err) {
+        console.error('Failed to fetch categories:', err)
+      }
     },
     async loadCharacters() {
-      const res = await fetch(`http://localhost:8000/api/test-characters/${this.selectedCategory}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
-      });
-      this.characters = await res.json();
-      this.currentIndex = 0;
-      this.score = 0;
-      this.examCompleted = false;
-      this.noCharacters = this.characters.length === 0;
+      try {
+        const res = await axios.get(`/categories/quiz/${this.selectedCategory}`)
+        this.characters = res.data.cards
+        this.currentIndex = 0
+        this.score = 0
+        this.examCompleted = false
+        this.noCharacters = this.characters.length === 0
+      } catch (err) {
+        console.error('Failed to load characters:', err)
+      }
     },
     handleOcrResult(char) {
-      this.userOcrChar = char;
+      this.userOcrChar = char
     },
     async submitAnswer() {
-      if (!this.currentCard) return;
+      if (!this.currentCard) return
 
-      const toast = useToast();
-
-      const canvasBlob = await this.$refs.TestocrCharacter.getCanvasBlob();
-      const formData = new FormData();
-      formData.append("image", canvasBlob, "drawing.png");
-
-      let recognizedChar = "";
+      const toast = useToast()
 
       try {
+        const canvasBlob = await this.$refs.TestocrCharacter.getCanvasBlob()
+        const formData = new FormData()
+        formData.append("image", canvasBlob, "drawing.png")
+
         const response = await fetch("http://localhost:5000/upload", {
           method: "POST",
           body: formData,
-          headers: { "Accept": "application/json" }
-        });
+          headers: { Accept: "application/json" }
+        })
 
-        const data = await response.json();
-        recognizedChar = data.text[0];
-      } catch (error) {
-        console.error("OCR request failed", error);
-        recognizedChar = "";
-      }
+        if (!response.ok) throw new Error("OCR request failed")
 
-      const expectedChar = this.currentCard.character.character;
-      const expectedPinyin = this.currentCard.character.pinyin.toLowerCase().replace(/\d/g, '');
-      const typed = this.typedPinyin.toLowerCase().replace(/\d/g, '');
+        const data = await response.json()
+        const recognizedChar = data.text[0] || ""
 
-      const isCorrect = recognizedChar === expectedChar && typed === expectedPinyin;
+        const expectedChar = this.currentCard.character.character
+        const expectedPinyin = this.currentCard.character.pinyin.toLowerCase().replace(/\d/g, "")
+        const typed = this.typedPinyin.toLowerCase().replace(/\d/g, "")
 
-      if (isCorrect) {
-        this.score++;
-        toast.success("✅ Correct!");
-      } else {
-        toast.error(`❌ Incorrect! Expected: ${expectedChar} (${expectedPinyin})`);
-      }
+        const isCorrect = recognizedChar === expectedChar && typed === expectedPinyin
 
-      this.typedPinyin = "";
-      this.$refs.TestocrCharacter.clearCanvas();
+        if (isCorrect) {
+          this.score++
+          toast.success("✅ Correct!")
+        } else {
+          toast.error(`❌ Incorrect! Expected: ${expectedChar} (${expectedPinyin})`)
+        }
 
-      if (this.currentIndex + 1 < this.characters.length) {
-        this.currentIndex++;
-      } else {
-        this.examCompleted = true;
+        this.typedPinyin = ""
+        this.$refs.TestocrCharacter.clearCanvas()
+
+        if (this.currentIndex + 1 < this.characters.length) {
+          this.currentIndex++
+        } else {
+          this.examCompleted = true
+        }
+
+      } catch (err) {
+        console.error("Error during answer submission:", err)
+        toast.error("⚠️ Failed to submit answer. Please try again.")
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

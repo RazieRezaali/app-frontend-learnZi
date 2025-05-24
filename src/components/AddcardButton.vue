@@ -1,4 +1,3 @@
-<!-- src/components/AddToCardButton.vue -->
 <template>
   <div class="add-button-container">
     <button @click="addToCard" class="add-btn">
@@ -10,43 +9,40 @@
 </template>
 
 <script>
-import { ref } from 'vue'
-import axios from 'axios'
+import { ref, getCurrentInstance } from 'vue';
 
 export default {
   props: {
     character: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
-    const success = ref(false)
-    const error = ref(null)
+    const success = ref(false);
+    const error = ref(null);
+
+    const { appContext } = getCurrentInstance();
+    const axios = appContext.config.globalProperties.$axios;
 
     const addToCard = async () => {
-      success.value = false
-      error.value = null
+      success.value = false;
+      error.value = null;
 
       try {
-        const token = localStorage.getItem('token')
-        await axios.post('http://localhost:8000/api/add-to-card', {
-          character: props.character
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
+        await axios.post('/add-to-card', {
+          character: props.character,
+        });
 
-        success.value = true
+        success.value = true;
       } catch (err) {
-        error.value = err.response?.data?.message || 'Something went wrong'
+        error.value = err.response?.data?.message || 'Something went wrong';
       }
-    }
+    };
 
-    return { success, error, addToCard }
-  }
-}
+    return { success, error, addToCard };
+  },
+};
 </script>
 
 <style scoped>

@@ -49,7 +49,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import axios from 'axios'
+import axios from '@/axios';
 import { useRouter } from 'vue-router'
 import { auth } from '@/stores/auth'
 
@@ -65,7 +65,7 @@ const error = ref(null)
 const submitForm = async () => {
   error.value = null
   try {
-    const response = await axios.post('http://localhost:8000/api/user/login', form.value)
+    const response = await axios.post('/user/login', form.value)
     const { token, user } = response.data
 
     auth.login(token, user)

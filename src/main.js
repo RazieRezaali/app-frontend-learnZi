@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import axios from '@/axios';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -109,6 +110,8 @@ app.component('Testocr-character', TestocrCharacter);
 app.component('char-details', CharDetails);
 
 app.use(router);
+
+app.config.globalProperties.$axios = axios;
 
 app.use(Toast, {
     position: POSITION.TOP_CENTER,
