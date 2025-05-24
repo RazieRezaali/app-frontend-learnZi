@@ -52,7 +52,7 @@
               </router-link>
             </li>
             <li class="nav-item">
-              <button @click="logout" class="nav-link btn btn-link px-0">
+              <button class="nav-link btn btn-link px-0" type="button" @click="showLogoutModal">
                 <i class="bi bi-box-arrow-right me-1 text-danger"></i>
               </button>
             </li>
@@ -69,10 +69,34 @@
       </div>
     </div>
   </nav>
+  <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content rounded-4 shadow border-0">
+        <div class="modal-header">
+          <h5 class="modal-title text-danger" id="logoutModalLabel">
+            <i class="bi bi-box-arrow-right me-2"></i> Confirm Logout
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center text-muted">
+          Are you sure you want to log out?
+        </div>
+        <div class="modal-footer justify-content-center border-0">
+          <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-danger rounded-pill px-4" @click="confirmLogout">
+            Yes, Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import { auth } from '@/stores/auth'
+import { Modal } from 'bootstrap'
 
 export default {
   name: 'NavigationBar',
@@ -80,9 +104,25 @@ export default {
     return { auth }
   },
   methods: {
-    logout() {
-      auth.logout()
-      this.$router.push('/login')
+    showLogoutModal() {
+      const modalElement = document.getElementById('logoutModal')
+      const modalInstance = Modal.getOrCreateInstance(modalElement)
+      modalInstance.show()
+    },
+    confirmLogout() {
+      this.$axios.post('/user/logout')
+        .catch(err => {
+          console.warn('Failed to logout:', err)
+        })
+        .finally(() => {
+          auth.logout()
+          this.$router.push('/login')
+        })
+
+      // Hide modal
+      const modalElement = document.getElementById('logoutModal')
+      const modalInstance = Modal.getInstance(modalElement)
+      if (modalInstance) modalInstance.hide()
     }
   }
 }
@@ -109,5 +149,9 @@ export default {
   border: none;
   background: none;
   font-weight: 500;
+}
+
+.modal-content {
+  transition: all 0.3s ease;
 }
 </style>
