@@ -155,9 +155,9 @@ export default {
 <style scoped>
 .test-container {
   padding: 2rem;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   font-family: 'Segoe UI', sans-serif;
-  background-color: #fdfdfd;
+  background-color: #f9fafb;
   color: #333;
   display: flex;
   flex-direction: column;

@@ -4,7 +4,7 @@
     <canvas ref="canvas" width="300" height="300" class="drawing-canvas"></canvas>
     <br>
     <button @click="clearCanvas" class="clear-btn">Clear</button>
-    <p class="ocr-result">{{ result }}</p>
+    <!-- <p class="ocr-result">{{ result }}</p> -->
   </div>
 </template>
 
@@ -112,6 +112,7 @@ export default{
   margin: auto;
   text-align: center;
   background: #fafafa;
+  max-height: 450px;
 }
 
 .drawing-canvas {

@@ -23,5 +23,10 @@ export default{
 </script>
 
 <style>
-
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #f9fafb;
+}
 </style>

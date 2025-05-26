@@ -27,7 +27,6 @@ export default {
 .home-layout {
   padding: 2rem;
   background: #f9fafb;
-  min-height: 100vh;
   box-sizing: border-box;
 }
 
@@ -43,10 +42,10 @@ export default {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
-  gap: 3rem;
+  align-items: stretch;
+  gap: 1rem;
   max-width: 1200px;
-  margin: 0 auto; /* centers the container */
+  margin: 0 ; /* centers the container */
   padding: 1rem;
 }
 
@@ -54,7 +53,7 @@ export default {
 .components-wrapper > * {
   flex: 1 1 400px;
   max-width: 500px;
-  background: white;
+  background: #f9fafb;
   border-radius: 12px;
   padding: 1rem;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);

@@ -144,10 +144,10 @@ export default {
   border: 2px solid #eee;
   border-radius: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  width: 350px;
+  max-width: 350px;
   text-align: center;
   background: #fff;
-  max-height: 400px; /* total box height */
+  max-height: 450px; /* total box height */
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -159,7 +159,7 @@ export default {
   margin: 1rem 0 0 0;
   overflow-y: auto;
   flex-grow: 1;
-  max-height: 300px;
+  max-height: 400px;
   scroll-behavior: smooth;
 }
 
