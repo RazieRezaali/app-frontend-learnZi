@@ -17,6 +17,7 @@
 <script>
 import { ref, watch, onMounted } from "vue";
 import hanzi from "hanzi";
+import axios from '@/axios';
 
 export default {
   props: {
@@ -129,10 +130,10 @@ export default {
     };
   },
   methods:{
-    selectChar(char){
-      console.log(char);
-      // this.$emit('selected-character',char)
-      this.$router.push({ name: 'CharacterDetails', params: { char } });
+    async selectChar(char){
+        const response = await axios.get(`/characters/id/${char}`);
+        const characterId = response.data.characterId;
+        this.$router.push({ name: 'CharDetails', params: { characterId } });
     }
   }
 };

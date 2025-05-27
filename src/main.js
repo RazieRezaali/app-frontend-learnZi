@@ -7,10 +7,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import RecognizeCharacter from './components/RecognizeCharacter.vue';
 import SimilarCharacter from './components/SimilarCharacter.vue';
 import StrokeOrder from './components/StrokeOrder.vue';
-import InfoOfCharacter from './components/InfoOfCharacter.vue';
 import CharacterAudio from './components/CharacterAudio.vue';
 import LearningCards from './components/LearningCards.vue';
-import CharacterDetails from './components/CharacterDetails.vue';
 import CardDetails from './components/CardDetails.vue';
 import UserRegister from './components/UserRegister.vue';
 import UserLogin from './components/UserLogin.vue';
@@ -44,12 +42,6 @@ const router = createRouter({
             path: '/characters',
             name: 'characters',
             component: HSKLevelCharacters
-        },
-        {
-            path: '/character/:char',
-            name: 'CharacterDetails',
-            component: CharacterDetails,
-            props: true
         },
         {
             path: '/register',
@@ -94,10 +86,8 @@ const app = createApp(App);
 app.component('recognize-character', RecognizeCharacter);
 app.component('similar-character', SimilarCharacter);
 app.component('stroke-order', StrokeOrder);
-app.component('info-character', InfoOfCharacter);
 app.component('character-audio', CharacterAudio);
 app.component('learning-cards', LearningCards);
-app.component('character-details', CharacterDetails);
 app.component('card-details', CardDetails);
 app.component('user-register', UserRegister);
 app.component('user-login', UserLogin);
