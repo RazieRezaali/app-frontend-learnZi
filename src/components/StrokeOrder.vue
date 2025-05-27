@@ -1,8 +1,23 @@
 <template>
-  <div class="stroke-container">
-    <h2>Stroke Order for: {{ character }}</h2>
-    <div ref="strokeCanvas" class="hanzi-writer"></div>
-    <button @click="animateStrokeOrder" class="animate-btn">Animate Strokes</button>
+  <div> <!--class="card shadow-sm p-4" -->
+    <!-- <h5 class="card-title text-center mb-4">🖋️ Stroke Order for "{{ character }}"</h5> -->
+
+    <div v-if="error" class="alert alert-warning text-center">
+      Stroke order data not available for this character.
+    </div>
+
+    <div v-else>
+      <div ref="strokeCanvas" class="hanzi-canvas mx-auto mb-2"></div>
+      <div class="text-center my-2">
+        <button
+          @click="animateStrokeOrder"
+          class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill shadow-sm"
+        >
+          <i class="bi bi-play-fill"></i>
+          Animate Stroke
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,11 +27,44 @@ import HanziWriter from "hanzi-writer";
 
 export default {
   props: {
-    character: String, // Character received from parent
+    character: String,
   },
   setup(props) {
     const strokeCanvas = ref(null);
+    const error = ref(false);
     let writer = null;
+
+    const loadStrokeOrder = (char) => {
+      if (!char || !strokeCanvas.value) return;
+
+      if (writer) {
+        writer.hideCharacter();
+        writer = null;
+      }
+
+      try {
+        writer = HanziWriter.create(strokeCanvas.value, char, {
+          width: 200,
+          height: 200,
+          strokeColor: "#000000",
+          delayBetweenStrokes: 300,
+          onLoadError: () => {
+            error.value = true;
+            writer = null;
+          },
+        });
+        error.value = false;
+      } catch (e) {
+        error.value = true;
+        console.warn(`Stroke order data not found for: ${char}`, e);
+      }
+    };
+
+    const animateStrokeOrder = () => {
+      if (writer) {
+        writer.animateCharacter();
+      }
+    };
 
     onMounted(() => {
       loadStrokeOrder(props.character);
@@ -29,68 +77,20 @@ export default {
       }
     );
 
-    function loadStrokeOrder(char) {
-      if (!char || !strokeCanvas.value) return;
-
-      // Clear previous instance
-      if (writer) {
-        writer.hideCharacter();
-        writer = null;
-      }
-
-      // Initialize HanziWriter
-      writer = HanziWriter.create(strokeCanvas.value, char, {
-        width: 200,
-        height: 200,
-        strokeColor: "#222",
-        delayBetweenStrokes: 300,
-      });
-    }
-
-    function animateStrokeOrder() {
-      if (writer) {
-        writer.animateCharacter();
-      }
-    }
-
     return {
       strokeCanvas,
       animateStrokeOrder,
+      error,
     };
   },
 };
 </script>
 
 <style scoped>
-.stroke-container {
-  padding: 1.5rem;
-  border: 2px solid #e5e7eb;
-  border-radius: 1rem;
-  background: #ffffff;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-  text-align: center;
-}
-
-.hanzi-writer {
+.hanzi-canvas {
   width: 200px;
   height: 200px;
-  margin: 1rem auto;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-.animate-btn {
-  padding: 0.5rem 1rem;
-  background-color: #3b82f6;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.animate-btn:hover {
-  background-color: #2563eb;
+  border: 1px solid #dee2e6;
+  border-radius: 0.5rem;
 }
 </style>

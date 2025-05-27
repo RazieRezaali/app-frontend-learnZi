@@ -6,53 +6,59 @@
       <div class="spinner-border text-primary" role="status"></div>
     </div>
 
-    <div v-else-if="character" class="card shadow-sm p-4 mb-4 bg-white border-0">
-      <div class="text-center">
-        <h2 class="display-4">{{ character.character }}</h2>
-        <p class="text-muted fst-italic mb-1">Pinyin: {{ character.pinyin }}</p>
-        <p class="lead">Definition: {{ character.definition }}</p>
+    <div v-else-if="character" class="card shadow-sm p-4 bg-white border-0">
+      <div class="row g-4 align-items-start">
+        <!-- Left Column: Stroke + Audio -->
+        <div class="col-lg-4 d-flex flex-column align-items-center">
+          <stroke-order :character="character.character" />
+        </div>
+
+        <!-- Center Column: Character + Info -->
+        <div class="col-lg-4 text-center text-lg-start d-flex align-items-center flex-column align-items-center ">
+          <span class="badge bg-secondary fs-6 px-3 py-2 mb-3">
+            Pinyin: {{ character.pinyin }}
+          </span>
+          <div class="definition-box card p-3 shadow-sm border-0 bg-light w-100">
+            <h5 class="mb-1 text-muted">Definition</h5>
+            <p class="mb-0">{{ character.definition }}</p>
+          </div>
+          <character-audio :character="character.character" class="mt-3" />
+        </div>
+
+        <!-- Right Column: Metadata Cards -->
+        <div class="col-lg-4">
+          <div class="row row-cols-2 g-3">
+            <div class="col">
+              <div class="p-6 border rounded shadow-sm d-flex flex-column align-items-center bg-light">
+                <i class="bi bi-pencil-fill text-primary fs-4 mb-1"></i>
+                <div class="fw-semibold">Strokes</div>
+                <div>{{ character.stroke_count }}</div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="p-6 border rounded shadow-sm d-flex flex-column align-items-center bg-warning bg-opacity-10">
+                <i class="bi bi-boxes text-warning fs-4 mb-1"></i>
+                <div class="fw-semibold">Radical</div>
+                <div>{{ character.radical }}</div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="p-6 border rounded shadow-sm d-flex flex-column align-items-center bg-success bg-opacity-10">
+                <i class="bi bi-graph-up-arrow text-success fs-4 mb-1"></i>
+                <div class="fw-semibold">HSK Level</div>
+                <div>{{ character.hsk_level || 'N/A' }}</div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="p-6 border rounded shadow-sm d-flex flex-column align-items-center bg-info bg-opacity-10">
+                <i class="bi bi-bar-chart-line text-info fs-4 mb-1"></i>
+                <div class="fw-semibold">Frequency Rank</div>
+                <div>{{ character.frequency_rank || 'N/A' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
-      <hr />
-
-      <div class="row text-center mb-4 g-3">
-        <div class="col-md-3">
-          <div class="p-3 bg-light border rounded shadow-sm">
-            <i class="bi bi-pencil-fill text-primary fs-4"></i>
-            <div class="fw-semibold mt-2">Strokes</div>
-            <div>{{ character.stroke_count }}</div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="p-3 bg-warning bg-opacity-10 border rounded shadow-sm">
-            <i class="bi bi-boxes text-warning fs-4"></i>
-            <div class="fw-semibold mt-2">Radical</div>
-            <div>{{ character.radical }}</div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="p-3 bg-success bg-opacity-10 border rounded shadow-sm">
-            <i class="bi bi-graph-up-arrow text-success fs-4"></i>
-            <div class="fw-semibold mt-2">HSK Level</div>
-            <div>{{ character.hsk_level || 'N/A' }}</div>
-          </div>
-        </div>
-
-        <div class="col-md-3">
-          <div class="p-3 bg-info bg-opacity-10 border rounded shadow-sm">
-            <i class="bi bi-bar-chart-line text-info fs-4"></i>
-            <div class="fw-semibold mt-2">Frequency Rank</div>
-            <div>{{ character.frequency_rank || 'N/A' }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-if="character" class="mt-4">
-      <stroke-order :character="character.character" class="mb-3" />
-      <character-audio :character="character.character" />
     </div>
   </div>
 </template>
@@ -87,17 +93,37 @@ onMounted(fetchCharacter)
 
 <style scoped>
 .details-page {
-  background-color: #f8f9fa;
+  background-color: #f9fafb;
   padding-top: 2rem;
-  padding-bottom: 4rem;
-  min-height: 100vh;
+  padding-bottom: 2rem;
 }
 
 .details-title {
-  font-size: 2.25rem;
-  font-weight: bold;
+  font-size: 2rem;
+  font-weight: 600;
   color: #212529;
   margin-bottom: 2rem;
   text-align: center;
+}
+
+.character-display {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.definition-box {
+  background-color: #f1f3f5;
+  border-radius: 0.5rem;
+}
+
+@media (max-width: 767.98px) {
+  .character-display {
+    font-size: 2.5rem;
+  }
+
+  .definition-box {
+    text-align: center;
+  }
 }
 </style>
