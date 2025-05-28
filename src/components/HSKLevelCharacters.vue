@@ -59,9 +59,12 @@
       </div>
     </div>
 
+    <!-- Error -->
+    <div v-else-if="error" class="alert alert-danger text-center mt-3 small">{{ error }}</div>
+
     <!-- No Result -->
     <div
-      v-if="!loading && characters.length === 0 && (selectedLevel || isSearching)"
+      v-else-if="!loading && characters.length === 0 && (selectedLevel || isSearching)"
       class="text-center text-muted mt-3 small"
     >
       <i class="bi bi-emoji-frown fs-5 d-block mb-1"></i>
@@ -69,9 +72,6 @@
         No characters found{{ selectedLevel ? ` for HSK ${selectedLevel}` : ' for your search.' }}
       </p>
     </div>
-
-    <!-- Error -->
-    <div v-if="error" class="alert alert-danger text-center mt-3 small">{{ error }}</div>
 
     <!-- Modal -->
     <CategoryModal
