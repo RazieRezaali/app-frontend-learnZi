@@ -121,7 +121,7 @@ const router = useRouter();
 const fetchCard = async () => {
   loading.value = true;
   try {
-    const res = await axios.get(`/card/${route.params.cardId}`);
+    const res = await axios.get(`/cards/${route.params.cardId}`);
     card.value = res.data.card;
   } catch (error) {
     console.error('Failed to load card:', error);
@@ -156,7 +156,7 @@ const cancelEdit = () => {
 const submitNote = async () => {
   try {
     loading.value = true;
-    const res = await axios.post(`/card-description/${card.value.id}`, {
+    const res = await axios.post(`/cards/description/${card.value.id}`, {
       description: editorData.value
     });
 

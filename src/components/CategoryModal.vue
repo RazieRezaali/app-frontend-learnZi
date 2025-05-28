@@ -213,7 +213,7 @@ export default {
       if (!this.selectedCategoryId) return;
 
       try {
-        await axios.post('/card', {
+        await axios.post('/cards', {
           character_id: this.character.id,
           category_id: this.selectedCategoryId
         });
