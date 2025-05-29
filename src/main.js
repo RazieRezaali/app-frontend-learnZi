@@ -20,6 +20,7 @@ import drawCharacter from './components/drawCharacter.vue';
 import UserProfile from './components/UserProfile.vue';
 import TestCard from './components/TestCard.vue';
 import CharDetails from './components/CharDetails.vue';
+import CharInfo from './components/CharInfo.vue';
 import TestocrCharacter from './components/TestocrCharacter.vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Toast, { POSITION } from 'vue-toastification'
@@ -98,6 +99,7 @@ app.component('draw-character', drawCharacter);
 app.component('test-card', TestCard);
 app.component('Testocr-character', TestocrCharacter);
 app.component('char-details', CharDetails);
+app.component('char-info', CharInfo);
 
 app.use(router);
 
