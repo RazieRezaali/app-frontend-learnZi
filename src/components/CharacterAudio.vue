@@ -1,15 +1,9 @@
 <template>
   <div class="audio-component text-center my-2 position-relative">
-    <!-- Play Button -->
-    <button
-      @click="getAudio"
-      class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill shadow-sm"
-      :disabled="loading"
-    >
+    <button class="btn btn-light" :disabled="loading" @click="getAudio">
       <i class="bi bi-volume-up-fill"></i>
       {{ loading ? 'Loading...' : 'Play Audio' }}
     </button>
-    <!-- Audio Player -->
     <div v-if="audioSrc" class="mt-3">
       <audio ref="audio" controls class="form-control w-100" style="max-width: 300px; margin: 0 auto;">
         <source :src="audioSrc" type="audio/mpeg" />

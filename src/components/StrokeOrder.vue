@@ -1,20 +1,13 @@
 <template>
-  <div> <!--class="card shadow-sm p-4" -->
-    <!-- <h5 class="card-title text-center mb-4">🖋️ Stroke Order for "{{ character }}"</h5> -->
-
+  <div>
     <div v-if="error" class="alert alert-warning text-center">
       Stroke order data not available for this character.
     </div>
-
     <div v-else>
-      <div ref="strokeCanvas" class="hanzi-canvas mx-auto mb-2"></div>
-      <div class="text-center my-2">
-        <button
-          @click="animateStrokeOrder"
-          class="btn btn-outline-secondary d-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill shadow-sm"
-        >
-          <i class="bi bi-play-fill"></i>
-          Animate Stroke
+      <div ref="strokeCanvas" class="hanzi-canvas mx-auto "></div>
+      <div class="text-center">
+        <button @click="animateStrokeOrder" class="btn btn-light mt-3">
+          <i class="bi bi-play-fill"></i> Animate Stroke
         </button>
       </div>
     </div>

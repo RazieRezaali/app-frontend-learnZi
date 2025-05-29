@@ -8,12 +8,11 @@
 
     <div v-else-if="character" class="card shadow-sm p-4 bg-white border-0">
       <div class="row g-4 align-items-start">
-        <!-- Left Column: Stroke + Audio -->
         <div class="col-lg-4 d-flex flex-column align-items-center">
           <stroke-order :character="character.character" />
+          <character-audio :character="character.character" />
         </div>
 
-        <!-- Center Column: Character + Info -->
         <div class="col-lg-4">
           <div class="d-flex flex-column h-100">
             <div>
@@ -29,7 +28,6 @@
           </div>
         </div>
 
-        <!-- Right Column: Metadata Cards -->
         <div class="col-lg-4">
           <div class="row row-cols-2 g-3">
             <div class="col" v-if="character.stroke_count">
@@ -59,9 +57,6 @@
                 <div class="fw-semibold">Frequency Rank</div>
                 <div>{{ character.frequency_rank || 'N/A' }}</div>
               </div>
-            </div>
-            <div class="col-12">
-                <character-audio :character="character.character" />
             </div>
           </div>
         </div>
