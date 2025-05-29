@@ -135,7 +135,7 @@ const error = ref('')
 onMounted(async () => {
   try {
     const res = await axios.get(`/user/profile`);
-    user.value = res.data
+    user.value = res.data.userProfile
   } catch (err) {
     error.value = err.response?.data?.message || 'Failed to load profile.'
   } finally {

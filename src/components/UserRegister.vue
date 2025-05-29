@@ -120,7 +120,7 @@ const updateDialCode = () => {
 onMounted(async () => {
   try {
     const res = await axios.get('/countries')
-    countries.value = res.data
+    countries.value = res.data.countries
   } catch (err) {
     console.error('Failed to fetch countries:', err)
   }
@@ -143,7 +143,7 @@ const submitForm = async () => {
     const { token, user } = res.data
 
     auth.login(token, user)
-    router.push('/dashboard')
+    router.push('/')
 
   } catch (err) {
     console.error('Registration failed:', err)
