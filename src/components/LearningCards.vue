@@ -135,23 +135,38 @@ const goToBreadcrumb = async (index) => {
 
 const fabOpen = ref(false)
 
-const onDeleteClick = () => {
-  console.log("Delete clicked")
-  // later: show delete modal or emit event
+const onDeleteClick = async () => {
+  const currentCategory = breadcrumbs.value[breadcrumbs.value.length - 1]
+  const confirmed = confirm(`Are you sure you want to delete "${currentCategory.name}"? This action cannot be undone.`)
+  if (!confirmed) return
+  try {
+    await axios.delete(`/categories/${currentCategory.id}`, {
+      data: {
+        categoryId: currentCategory.id
+      }
+    })
+    breadcrumbs.value.pop()
+    if (breadcrumbs.value.length > 0) {
+      await goToBreadcrumb(breadcrumbs.value.length - 1)
+    } else {
+      await fetchRootCategories()
+    }
+    toast.success('Category deleted successfully!')
+  } catch (error) {
+    console.error('Delete failed:', error)
+    toast.error(error.response?.data?.message || 'Something went wrong')
+  }
 }
 
 const onRenameClick = async () => {
   const currentCategory = breadcrumbs.value[breadcrumbs.value.length - 1]
   const newName = prompt("Enter new category name:", currentCategory.name)
-
   if (!newName || newName.trim() === '') return
-
   try {
     await axios.put(`/categories/${currentCategory.id}`, {
       name: newName,
       categoryId: currentCategory.id,
     })
-
     currentCategory.name = newName
     toast.success('Category renamed successfully!')
   } catch (error) {
