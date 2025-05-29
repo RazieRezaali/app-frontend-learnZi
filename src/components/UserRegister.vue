@@ -143,7 +143,7 @@ const submitForm = async () => {
     const { token, user } = res.data
 
     auth.login(token, user)
-    router.push('/')
+    router.push('/learning')
 
   } catch (err) {
     console.error('Registration failed:', err)

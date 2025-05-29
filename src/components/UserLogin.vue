@@ -69,7 +69,7 @@ const submitForm = async () => {
     const { token, user } = response.data
 
     auth.login(token, user)
-    router.push('/')
+    router.push('/learning')
   } catch (err) {
     error.value = err.response?.data?.message || 'Login failed'
   }
