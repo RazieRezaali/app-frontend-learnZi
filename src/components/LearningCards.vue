@@ -1,6 +1,5 @@
 <template>
   <div class="category-view container py-5">
-    <!-- Breadcrumb -->
     <nav aria-label="breadcrumb" class="mb-4">
       <ol class="breadcrumb bg-light px-3 py-2 rounded shadow-sm">
         <li class="breadcrumb-item" v-if="breadcrumbs.length === 0">
@@ -65,6 +64,20 @@
         </div>
       </div>
     </div>
+
+    <div class="fab-container" v-if="breadcrumbs.length > 0">
+      <div v-if="fabOpen" class="fab-options">
+        <button class="fab-option bg-danger" @click="onDeleteClick">
+          <i class="bi bi-trash"></i>
+        </button>
+        <button class="fab-option bg-warning text-dark" @click="onRenameClick">
+          <i class="bi bi-pencil"></i>
+        </button>
+      </div>
+      <button class="fab-main" @click="fabOpen = !fabOpen">
+        <i :class="fabOpen ? 'bi bi-x' : 'bi bi-plus'"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -72,6 +85,9 @@
 import { ref, onMounted } from 'vue'
 import axios from '@/axios';
 import { auth } from '@/stores/auth'
+import { useToast } from "vue-toastification";
+
+const toast = useToast()
 
 const categories = ref([])
 const cards = ref([])
@@ -116,6 +132,33 @@ const goToBreadcrumb = async (index) => {
   categories.value = res.data.categoryChildren
   cards.value = res.data.cards
 }
+
+const fabOpen = ref(false)
+
+const onDeleteClick = () => {
+  console.log("Delete clicked")
+  // later: show delete modal or emit event
+}
+
+const onRenameClick = async () => {
+  const currentCategory = breadcrumbs.value[breadcrumbs.value.length - 1]
+  const newName = prompt("Enter new category name:", currentCategory.name)
+
+  if (!newName || newName.trim() === '') return
+
+  try {
+    await axios.put(`/categories/${currentCategory.id}`, {
+      name: newName,
+      categoryId: currentCategory.id,
+    })
+
+    currentCategory.name = newName
+    toast.success('Category renamed successfully!')
+  } catch (error) {
+    console.error('Rename failed:', error)
+    toast.error(error.response?.data?.message || 'Something went wrong')
+  }
+}
 </script>
 
 <style scoped>
@@ -127,4 +170,51 @@ const goToBreadcrumb = async (index) => {
   border: 0.7px solid #0d6efd !important;
   transition: border-color 0.05s;
 }
+
+.fab-container {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fab-main {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.fab-options {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  gap: 10px;
+}
+
+.fab-option {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  color: white;
+  font-size: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
 </style>
