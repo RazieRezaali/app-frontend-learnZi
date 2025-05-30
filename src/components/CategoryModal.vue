@@ -18,6 +18,9 @@
           <div v-if="successMessage" class="alert alert-success mt-3" role="alert">
             {{ successMessage }}
           </div>
+          <div v-if="errorMessage" class="alert alert-danger mt-3" role="alert">
+            {{ errorMessage }}
+          </div>
         </div>
 
         <div v-if="userId" class="modal-footer">
@@ -47,7 +50,8 @@ export default {
       addRootNodeId: null,
       selectedCategoryId: null,
       jstreeInstance: null,
-      successMessage: ''
+      successMessage: '',
+      errorMessage: ''
     };
   },
   computed: {
@@ -193,6 +197,7 @@ export default {
     },
 
     async submitNewCategory() {
+      this.errorMessage = '';
       try {
         await axios.post('/categories', {
           name: this.newCategoryName,
@@ -205,6 +210,12 @@ export default {
         $('#category-tree').find('.custom-input-form').remove();
         this.fetchCategories();
       } catch (error) {
+        if (error.response && error.response.status === 422) {
+          const errors = error.response.data.errors;
+          this.errorMessage = Object.values(errors).flat().join(' ');
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again.';
+        }
         console.error('Failed to add category:', error);
       }
     },
