@@ -65,13 +65,16 @@
       </div>
     </div>
 
-    <div class="fab-container" v-if="breadcrumbs.length > 0">
+    <div class="fab-container">
       <div v-if="fabOpen" class="fab-options">
-        <button class="fab-option bg-danger" @click="onDeleteClick">
-          <i class="bi bi-trash"></i>
+        <button class="fab-option bg-success" @click="onAddCategoryClick">
+          <i class="bi bi-plus-circle"></i>
         </button>
-        <button class="fab-option bg-warning text-dark" @click="onRenameClick">
+        <button class="fab-option bg-warning" @click="onRenameClick" v-if="breadcrumbs.length > 0">
           <i class="bi bi-pencil"></i>
+        </button>
+        <button class="fab-option bg-danger" @click="onDeleteClick" v-if="breadcrumbs.length > 0">
+          <i class="bi bi-trash"></i>
         </button>
       </div>
       <button class="fab-main" @click="fabOpen = !fabOpen">
@@ -172,6 +175,40 @@ const onRenameClick = async () => {
   } catch (error) {
     console.error('Rename failed:', error)
     toast.error(error.response?.data?.message || 'Something went wrong')
+  }
+}
+
+const onAddCategoryClick = async () => {
+  const parentId = breadcrumbs.value.length > 0
+    ? breadcrumbs.value[breadcrumbs.value.length - 1].id
+    : null;
+
+  const name = prompt('Enter the new category name:')
+  if (!name || name.trim() === '') return
+
+  try {
+    await axios.post('/categories', {
+      name: name.trim(),
+      parent_id: parentId,
+      user_id: auth.user?.id
+    })
+
+    toast.success('Category added successfully!')
+
+    if (parentId) {
+      await goToBreadcrumb(breadcrumbs.value.length - 1)
+    } else {
+      await fetchRootCategories()
+    }
+  } catch (error) {
+    if (error.response?.status === 422) {
+      const errors = error.response.data.errors
+      const message = Object.values(errors).flat().join(' ')
+      toast.error(message)
+    } else {
+      console.error('Add failed:', error)
+      toast.error(error.response?.data?.message || 'Something went wrong')
+    }
   }
 }
 </script>
