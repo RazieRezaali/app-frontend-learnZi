@@ -76,6 +76,7 @@ export default {
     CharacterAudio
   },
   props: ['characterId'],
+  emits: ['character-loaded'],
   data() {
     return {
       character: null,
@@ -92,6 +93,7 @@ export default {
       try {
         const response = await axios.get(`/characters/${this.characterId}`)
         this.character = response.data.character
+        this.$emit('character-loaded', this.character)
       } catch (error) {
         console.error('Failed to fetch character:', error)
       } finally {
