@@ -21,6 +21,7 @@ import UserProfile from './components/UserProfile.vue';
 import TestCard from './components/TestCard.vue';
 import CharDetails from './components/CharDetails.vue';
 import CharInfo from './components/CharInfo.vue';
+import EditProfile from './components/EditProfile.vue';
 import TestocrCharacter from './components/TestocrCharacter.vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 import Toast, { POSITION } from 'vue-toastification'
@@ -79,6 +80,11 @@ const router = createRouter({
             name: 'TestCard',
             component: TestCard
         },
+        {
+            path: '/profile/edit',
+            name: 'EditProfile',
+            component: EditProfile
+        },
     ]
 });
 
@@ -100,6 +106,7 @@ app.component('test-card', TestCard);
 app.component('Testocr-character', TestocrCharacter);
 app.component('char-details', CharDetails);
 app.component('char-info', CharInfo);
+app.component('edit-profile', EditProfile);
 
 app.use(router);
 
