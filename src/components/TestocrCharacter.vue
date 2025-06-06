@@ -26,6 +26,22 @@ export default{
         this.setupCanvas();
     },
     methods: {
+        async sendImageAndGetChar() {
+            const blob = await this.getCanvasBlob()
+            const formData = new FormData()
+            formData.append("image", blob, "drawing.png")
+
+            try {
+                const response = await axios.post('/ocr', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+                })
+                const char = response.data.text?.[0] || ""
+                return char
+            } catch (error) {
+                console.error("OCR Error:", error)
+                return null
+            }
+            },
         setupCanvas() {
             this.canvas = this.$refs.canvas;
             this.ctx = this.canvas.getContext("2d");

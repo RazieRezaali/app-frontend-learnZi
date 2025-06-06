@@ -106,19 +106,7 @@ export default {
       const toast = useToast()
 
       try {
-        const canvasBlob = await this.$refs.TestocrCharacter.getCanvasBlob()
-        const formData = new FormData()
-        formData.append("image", canvasBlob, "drawing.png")
-
-        const response = await axios.post('/ocr', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' }
-        });
-
-        if (!response.ok) throw new Error("OCR request failed")
-
-        const data = await response.json()
-        const recognizedChar = data.text[0] || ""
-
+        const recognizedChar = await this.$refs.TestocrCharacter.sendImageAndGetChar()
         const expectedChar = this.currentCard.character.character
         const expectedPinyin = this.currentCard.character.pinyin.toLowerCase().replace(/\d/g, "")
         const typed = this.typedPinyin.toLowerCase().replace(/\d/g, "")
