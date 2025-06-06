@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from '@/axios'
 
 export default {
   name: 'ScanCharacters',
@@ -90,7 +90,7 @@ export default {
       formData.append('image', this.image);
 
       try {
-        const response = await axios.post('http://localhost:5000/upload', formData, {
+        const response = await axios.post('/ocr', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

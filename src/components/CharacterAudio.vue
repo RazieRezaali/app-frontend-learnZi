@@ -14,6 +14,7 @@
 </template>
 
 <script>
+import axios from '@/axios';
 export default {
   props: {
     character: String,
@@ -28,31 +29,29 @@ export default {
     async getAudio() {
       this.loading = true;
       try {
-        const response = await fetch('http://localhost:5001/speak', {
-          method: 'POST',
+        const response = await axios.post('/audio', {
+          character: this.character
+        }, {
+          responseType: 'blob', // 👈 necessary for audio
           headers: {
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ character: this.character })
+          }
         });
 
-        if (!response.ok) throw new Error("Failed to fetch audio");
-
-        const blob = await response.blob();
-        this.audioSrc = URL.createObjectURL(blob);
+        this.audioSrc = URL.createObjectURL(response.data);
 
         this.$nextTick(() => {
           this.$refs.audio.play();
         });
 
       } catch (err) {
-        console.error(err);
+        console.error('Audio fetch failed:', err);
       } finally {
         this.loading = false;
       }
     }
   }
-};
+}
 </script>
 
 <style scoped>

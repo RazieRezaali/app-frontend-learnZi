@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import axios from '@/axios'
 export default{
     data() {
         return {
@@ -79,18 +80,15 @@ export default{
                 formData.append("image", blob, "drawing.png");
 
                 try {
-                    const response = await fetch("http://localhost:5000/upload", {
-                        method: "POST",
-                        body: formData,
-                        headers: { "Accept": "application/json" }
+                    const response = await axios.post('/ocr', formData, {
+                        headers: { 'Content-Type': 'multipart/form-data' }
                     });
 
-                    const data = await response.json();
-                    console.log("OCR Result:", data.text);
-                    this.result = data.text[0];
+                    console.log("OCR Result:", response.data.text);
+                    this.result = response.data.text[0];
                     this.$emit('get-ocr-result', this.result);
                 } catch (error) {
-                    console.error("Fetch Error:", error);
+                    console.error("OCR Error:", error);
                     this.result = "Error processing image";
                 }
             }, "image/png");

@@ -110,11 +110,9 @@ export default {
         const formData = new FormData()
         formData.append("image", canvasBlob, "drawing.png")
 
-        const response = await fetch("http://localhost:5000/upload", {
-          method: "POST",
-          body: formData,
-          headers: { Accept: "application/json" }
-        })
+        const response = await axios.post('/ocr', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
+        });
 
         if (!response.ok) throw new Error("OCR request failed")
 
