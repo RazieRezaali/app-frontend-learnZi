@@ -1,4 +1,4 @@
-# ocr-vue-hanzi
+# app-frontend-learnzi
 
 ## Project setup
 ```
