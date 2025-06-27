@@ -32,7 +32,7 @@ export default {
         const response = await axios.post('/audio', {
           character: this.character
         }, {
-          responseType: 'blob', // 👈 necessary for audio
+          responseType: 'blob',
           headers: {
             'Content-Type': 'application/json'
           }

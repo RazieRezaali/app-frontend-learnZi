@@ -25,13 +25,9 @@ export default {
   },
   setup(props) {
     const similarCharacters = ref([]);
-
-    // Start hanzi library
     onMounted(() => {
       hanzi.start();
     });
-
-    // Watch for changes in the input character
     watch(
       () => props.character,
       (newChar) => {
@@ -44,18 +40,12 @@ export default {
     );
 
     function findSimilarCharacters(character) {
-      // Decompose the character
       const decomposition = hanzi.decompose(character);
       const components = new Set([
         ...(decomposition.components1 || []),
         ...(decomposition.components2 || []),
         ...(decomposition.components3 || []),
       ]);
-
-      // Load all standard characters (replace with actual dataset if needed)
-    //   const allCharacters = require("@/assets/characters.json"); // Ensure the file exists
-
-      // Find characters that share components
       const candidateCharacters = new Set();
       components.forEach((component) => {
         const relatedChars = hanzi.getCharactersWithComponent(component);
@@ -64,9 +54,7 @@ export default {
         }
       });
 
-      candidateCharacters.delete(character); // Remove the input character itself
-
-      // Function to calculate similarity score
+      candidateCharacters.delete(character);
       function calculateSimilarity(char, targetComponents) {
         const charDecomposition = hanzi.decompose(char);
         const charComponents = new Set([
@@ -75,12 +63,10 @@ export default {
           ...(charDecomposition.components3 || []),
         ]);
 
-        // Count shared components
         const sharedComponents = [...charComponents].filter((comp) =>
           targetComponents.has(comp)
         );
 
-        // Define common radicals (less important for similarity)
         const commonRadicals = new Set([
           "一",
           "丨",
@@ -99,27 +85,24 @@ export default {
           (comp) => !commonRadicals.has(comp)
         );
 
-        // Check if primary radical is the same
         const hasSamePrimaryRadical =
           sharedComponents.length > 0 &&
           sharedComponents[0] === [...targetComponents][0];
 
-        // Compute similarity score
         let score = sharedComponents.length * 2 + uniqueSharedComponents.length * 3;
         if (hasSamePrimaryRadical) score += 3;
 
         return score;
       }
 
-      // Rank similar characters
       const topSimilarChars = [...candidateCharacters]
         .map((char) => ({
           character: char,
           similarity: calculateSimilarity(char, components),
         }))
-        .filter((result) => result.similarity > 0) // Remove zero similarity characters
-        .sort((a, b) => b.similarity - a.similarity) // Sort by similarity
-        .slice(0, 9) // Get top 9 similar characters
+        .filter((result) => result.similarity > 0)
+        .sort((a, b) => b.similarity - a.similarity)
+        .slice(0, 9)
         .map((result) => result.character);
 
       return [character, ...topSimilarChars];
@@ -148,7 +131,7 @@ export default {
   max-width: 350px;
   text-align: center;
   background: #fff;
-  max-height: 450px; /* total box height */
+  max-height: 450px;
   overflow: hidden;
   display: flex;
   flex-direction: column;

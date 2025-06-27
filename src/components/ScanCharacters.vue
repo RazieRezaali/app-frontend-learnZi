@@ -75,7 +75,7 @@ export default {
         this.error = '';
         this.ocrResult = [];
         this.copied = false;
-        this.scanAttempted = false; // 👈 reset when new image is selected
+        this.scanAttempted = false;
       }
     },
     async submitImage() {
@@ -84,7 +84,7 @@ export default {
       this.loading = true;
       this.error = '';
       this.ocrResult = [];
-      this.scanAttempted = true; // 👈 Only now, we say a scan has happened
+      this.scanAttempted = true;
 
       const formData = new FormData();
       formData.append('image', this.image);

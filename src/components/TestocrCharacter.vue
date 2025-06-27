@@ -17,9 +17,9 @@ import axios from '@/axios'
 export default{
     data() {
         return {
-            result: "",  // Store OCR result
-            drawing: false,  // Track drawing state
-            isSending: false, // Prevent excessive requests while drawing
+            result: "",
+            drawing: false,
+            isSending: false,
         };
     },
     mounted() {
@@ -53,7 +53,7 @@ export default{
         },
         startDrawing(event) {
             this.drawing = true;
-            this.draw(event);  // Start drawing immediately
+            this.draw(event);
         },
         draw(event) {
             if (!this.drawing) return;

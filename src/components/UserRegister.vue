@@ -72,7 +72,6 @@
 import { ref, onMounted } from 'vue'
 import axios from '@/axios';
 
-// Form state
 const form = ref({
   fname: '',
   lname: '',
@@ -85,11 +84,9 @@ const form = ref({
   level_id: '',
 })
 
-// Country data
 const countries = ref([])
 const dialCode = ref('')
 
-// Levels data (simulating IDs)
 const levels = {
   beginner: [
     { id: 1, name: 'HSK1' },
@@ -116,7 +113,6 @@ const updateDialCode = () => {
   }
 }
 
-// Fetch countries from API
 onMounted(async () => {
   try {
     const res = await axios.get('/countries')
@@ -126,7 +122,6 @@ onMounted(async () => {
   }
 })
 
-// Handle form submission
 import { auth } from '@/stores/auth'
 import { useRouter } from 'vue-router'
 const router = useRouter()

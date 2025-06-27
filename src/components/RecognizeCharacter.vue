@@ -13,9 +13,9 @@ import axios from '@/axios'
 export default{
     data() {
         return {
-            result: "",  // Store OCR result
-            drawing: false,  // Track drawing state
-            isSending: false, // Prevent excessive requests while drawing
+            result: "",
+            drawing: false,
+            isSending: false,
         };
     },
     mounted() {
@@ -33,7 +33,7 @@ export default{
         },
         startDrawing(event) {
             this.drawing = true;
-            this.draw(event);  // Start drawing immediately
+            this.draw(event);
         },
         draw(event) {
             if (!this.drawing) return;
@@ -50,19 +50,18 @@ export default{
             this.ctx.beginPath();
             this.ctx.moveTo(x, y);
 
-            // Throttle sending requests while drawing
             if (!this.isSending) {
                 this.isSending = true;
                 setTimeout(() => {
                     this.sendImage();
                     this.isSending = false;
-                }, 1000);  // Send request every 1 second while drawing
+                }, 1000);
             }
         },
         stopDrawing() {
             this.drawing = false;
             this.ctx.beginPath();
-            this.sendImage();  // Send image when drawing stops
+            this.sendImage();
         },
         async sendImage() {
             const tempCanvas = document.createElement("canvas");

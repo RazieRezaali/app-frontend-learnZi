@@ -1,6 +1,5 @@
 <template>
   <div class="container py-3">
-    <!-- Search -->
     <div class="mb-4 text-center">
       <div class="input-group input-group-sm w-100 w-md-75 mx-auto">
         <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
@@ -171,7 +170,6 @@ export default {
     }
   },
   created() {
-    // Debounced version of searchCharacters
     this.debouncedSearch = debounce(this.searchCharacters, 500)
   }
 }

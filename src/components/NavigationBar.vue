@@ -119,7 +119,6 @@ export default {
           this.$router.push('/login')
         })
 
-      // Hide modal
       const modalElement = document.getElementById('logoutModal')
       const modalInstance = Modal.getInstance(modalElement)
       if (modalInstance) modalInstance.hide()

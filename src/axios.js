@@ -18,7 +18,6 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Optional: handle 401 responses globally
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
